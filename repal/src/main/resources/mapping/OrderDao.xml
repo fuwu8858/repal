@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springapp.mvc.dao.TradeOrderDao">
+    
+	<sql id="orderColumns">
+		a.id AS "id",
+		a.member_id AS "memberId",
+		a.member_ip AS "memberIp",
+		a.merchant_id AS "merchantId",
+		a.notifyurl AS "notifyurl",
+		a.order_no AS "orderNo",
+
+		a.sign AS "sign",
+		a.status AS "status",
+		a.sign AS "sign",
+		a.sign_type AS "signType",
+		a.token_id AS "tokenId",
+		a.total_fee AS "totalFee",
+		a.trans_time AS "transTime",
+		a.update_time AS "updateTime",
+		a.bind_id AS "bindId",
+		a.version AS "version"
+	</sql>
+	
+	<sql id="orderJoins">
+	</sql>
+    
+	<select id="get" resultType="com.springapp.mvc.model.TradeOrder">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM trade_order a
+		<include refid="orderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+    <select id="getOrderByOrderNo" resultType="com.springapp.mvc.model.TradeOrder">
+		SELECT
+			<include refid="orderColumns"/>
+		FROM trade_order a
+		<include refid="orderJoins"/>
+		WHERE a.order_no = #{orderNo}
+	</select>
+	
+	<select id="findList" resultType="com.springapp.mvc.model.TradeOrder">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM trade_order a
+		<include refid="orderJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.springapp.mvc.model.TradeOrder">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM trade_order a
+		<include refid="orderJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO trade_order (
+			id,
+			member_id,
+			member_ip,
+			merchant_id,
+			notifyurl,
+			order_no,
+
+			sign,
+			sign_type,
+			token_id,
+			bind_id,
+			total_fee,
+			trans_time,
+			update_time,
+			version
+		) VALUES (
+			#{id},
+			#{memberId},
+			#{memberIp},
+			#{merchantId},
+			#{notifyurl},
+			#{orderNo},
+
+			#{sign},
+			#{signType},
+			#{tokenId},	#{bindId},
+			#{totalFee},
+			#{transTime},
+			#{updateTime},
+			#{version}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE trade_order SET
+			status=#{status},
+			update_time=#{updateTime}
+		WHERE order_no = #{orderNo}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM trade_order
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

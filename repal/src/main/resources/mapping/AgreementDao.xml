@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springapp.mvc.dao.AgreementDao">
+    
+	<sql id="orderColumns">
+		a.id AS "id",
+		a.member_id AS "memberId",
+		a.merchant_id AS "merchantId",
+		a.bind_id AS "bindId",
+
+		a.card_no AS "cardNo",
+		a.cert_no AS "certNo",
+		a.phone AS "phone",
+		a.owner AS "owner",
+
+
+		a.create_time AS "createTime",
+
+		a.relation_id AS "relationId"
+
+	</sql>
+	
+	<sql id="orderJoins">
+	</sql>
+    
+	<select id="get" resultType="com.springapp.mvc.model.TradeOrder">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM trade_order a
+		<include refid="orderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+
+
+    <select id="findAgreement" resultType="com.springapp.mvc.model.Agreement" parameterType="Object">
+		SELECT
+        <include refid="orderColumns"/>
+		FROM agreement a
+		<include refid="orderJoins"/>
+		WHERE a.card_no = #{cardNo} and  a.merchant_id =#{merchantId}
+	</select>
+    <select id="findAgreementByBindId" resultType="com.springapp.mvc.model.Agreement" parameterType="Object">
+        SELECT
+        <include refid="orderColumns"/>
+        FROM agreement a
+        <include refid="orderJoins"/>
+        WHERE  a.bind_id =#{bindId}
+    </select>
+	<select id="findList" resultType="com.springapp.mvc.model.TradeOrder">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM trade_order a
+		<include refid="orderJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.springapp.mvc.model.TradeOrder">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM trade_order a
+		<include refid="orderJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO agreement (
+			id,
+			member_id,
+
+			merchant_id,
+
+
+			card_no,
+			cert_no,
+			phone,
+			owner,
+
+
+
+			bind_id,
+
+			create_time,
+
+			relation_id
+
+		) VALUES (
+			#{id},
+			#{memberId},
+
+			#{merchantId},
+
+
+			#{cardNo},
+			#{certNo},
+			#{phone},
+			#{owner},
+
+
+
+			#{bindId},
+
+			#{createTime},
+			#{relationId}
+
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE order SET 	
+			member_id = #{memberId},
+			member_ip = #{memberIp},
+			merchant_id = #{merchantId},
+			notifyurl = #{notifyurl},
+			order_no = #{orderNo},
+			card_no = #{cardNo},
+			cert_no = #{certNo},
+			owner = #{owner},
+			phone = #{phone},
+			sign = #{sign},
+			sign_type = #{signType},
+			token_id = #{tokenId},
+			total_fee = #{totalFee},
+			trans_time = #{transTime},
+			version = #{version}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM trade_order
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
